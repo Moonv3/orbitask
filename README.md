@@ -23,13 +23,25 @@ npm start
 
 ### Vercel (direkomendasikan)
 
+Aplikasi ini sudah live di **https://orbitask-dun.vercel.app**
+(repo `Moonv3/orbitask`, project Vercel `Moonv/orbitask`, production branch `main`).
+
+Untuk deploy ulang atau fork ke akun sendiri:
+
 1. Push repository ke GitHub (branch `main` atau `master`).
 2. Di Vercel, pilih **Add New → Project** lalu import repository tersebut.
 3. Biarkan deteksi otomatis Next.js; build command `npm run build` sudah ditetapkan
    di `vercel.json`. Tidak ada environment variable yang dibutuhkan.
-4. Setiap push/PR otomatis diverifikasi oleh GitHub Actions
-   (`.github/workflows/ci.yml`: `typecheck`, `lint`, `build`) dan mendapat
-   preview deployment.
+4. Hubungkan repo GitHub ke project agar setiap push/PR otomatis dibuatkan
+   deployment (preview untuk PR, produksi untuk `main`).
+5. GitHub Actions (`.github/workflows/ci.yml`) juga menjalankan `typecheck`,
+   `lint`, dan `build` pada setiap push/PR ke `main`/`master`.
+
+Deploy manual dari CLI (butuh `vercel login`):
+
+```bash
+vercel --prod
+```
 
 Data pengguna tetap berada di browser masing-masing (localStorage), jadi
 tidak perlu database atau variabel rahasia.
