@@ -2,11 +2,11 @@
 
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { useTaskStore } from "@/store/useTaskStore";
+import { useEffectiveQuality } from "@/lib/device";
 import GalaxyScene from "./GalaxyScene";
 
 export default function Galaxy() {
-  const quality = useTaskStore((state) => state.settings.quality);
+  const quality = useEffectiveQuality();
 
   return (
     <div className="absolute inset-0">

@@ -14,7 +14,8 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { Color, type Mesh } from "three";
-import { useActiveSystem, useTaskStore } from "@/store/useTaskStore";
+import { useEffectiveQuality } from "@/lib/device";
+import { useActiveSystem } from "@/store/useTaskStore";
 import { MilkyWay, NebulaCloud } from "./Atmosphere";
 import CameraRig from "./CameraRig";
 import Planet from "./Planet";
@@ -27,7 +28,7 @@ type SceneProps = {
 
 export default function Scene({ autoRotate, resetSignal }: SceneProps) {
   const system = useActiveSystem();
-  const quality = useTaskStore((state) => state.settings.quality);
+  const quality = useEffectiveQuality();
   const tasks = system.tasks;
   const [sunMesh, setSunMesh] = useState<Mesh | null>(null);
   const flareColor = useMemo(() => new Color(system.accent), [system.accent]);

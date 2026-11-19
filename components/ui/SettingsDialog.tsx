@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { parseBackup, createBackup } from "@/lib/backup";
+import { detectDevice } from "@/lib/device";
 import { formatMinutes, todayKey } from "@/lib/format";
 import { currentStreak } from "@/lib/selectors";
 import { playCompletionChime } from "@/lib/sound";
@@ -22,20 +23,27 @@ import type { Backup, Quality, System } from "@/lib/types";
 const sectionTitle =
   "text-[10px] font-semibold uppercase tracking-[0.18em] text-muted";
 
+type QualityChoice = "auto" | Quality;
+
 const QUALITY_OPTIONS: {
-  value: Quality;
+  value: QualityChoice;
   label: string;
   hint: string;
 }[] = [
   {
+    value: "auto",
+    label: "Otomatis",
+    hint: "Ikut kemampuan perangkat",
+  },
+  {
     value: "high",
     label: "Sinematik",
-    hint: "Bloom, trail orbit, bintang padat",
+    hint: "Efek penuh, lebih berat",
   },
   {
     value: "light",
     label: "Ringan",
-    hint: "Tanpa bloom, lebih hemat baterai",
+    hint: "Hemat baterai",
   },
 ];
 
@@ -47,6 +55,7 @@ export default function SettingsDialog() {
   const closeSettings = useTaskStore((state) => state.closeSettings);
   const settings = useTaskStore((state) => state.settings);
   const updateSettings = useTaskStore((state) => state.updateSettings);
+  const [device] = useState(() => detectDevice());
   const reopenIntro = useTaskStore((state) => state.reopenIntro);
   const resetStreak = useTaskStore((state) => state.resetStreak);
   const restoreData = useTaskStore((state) => state.restoreData);
@@ -196,14 +205,21 @@ export default function SettingsDialog() {
 
           <section>
             <span className={sectionTitle}>Kualitas visual</span>
-            <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="mt-2 grid grid-cols-3 gap-2">
               {QUALITY_OPTIONS.map((option) => {
-                const active = settings.quality === option.value;
+                const active = (settings.autoQuality ? "auto" : settings.quality) === option.value;
                 return (
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() => updateSettings({ quality: option.value })}
+                    onClick={() =>
+                      option.value === "auto"
+                        ? updateSettings({ autoQuality: true })
+                        : updateSettings({
+                            autoQuality: false,
+                            quality: option.value,
+                          })
+                    }
                     aria-pressed={active}
                     className={`rounded-2xl border p-3 text-left transition ${
                       active
@@ -225,6 +241,15 @@ export default function SettingsDialog() {
                 );
               })}
             </div>
+            {settings.autoQuality && (
+              <p className="mt-2 text-[10px] leading-relaxed text-muted">
+                Rekomendasi perangkat: {device.recommended === "high" ? "Sinematik" : "Ringan"}
+                {device.reasons.length > 0
+                  ? ` (${device.reasons.join(", ")})`
+                  : ""}
+                .
+              </p>
+            )}
           </section>
 
           <section className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/[0.025] p-3">

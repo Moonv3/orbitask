@@ -88,6 +88,20 @@ Peta galaksi (mode `galaxy`) adalah tambahan di luar daftar milestone di atas.
   memilih, `Enter` menjalankan, `Esc` menutup.
 - **Suara** default mati dan hanya aktif jika di-unmute di Pengaturan.
 
+## Kualitas, fallback, dan instalasi
+
+- **Kualitas otomatis** adalah default. Orbitask memilih `Ringan` saat perangkat
+  memakai reduced motion, memori/prosesor terbatas, mode hemat data, layar sentuh
+  kecil, atau renderer perangkat lunak. Pilihan manual di Pengaturan selalu
+  menang; field lama `quality` tetap disimpan sebagai preferensi cadangan.
+- **Fallback WebGL**: jika konteks 3D tidak tersedia atau terputus, kanvas
+  diganti panel penjelas dengan tombol **Buka daftar tugas** dan **Coba lagi**.
+  Data dan seluruh fitur non-3D tetap bisa dipakai.
+- **Installable (PWA)**: manifest di `app/manifest.ts`, ikon 192/512 px
+  (`scripts/generate-icons.mjs`), dan service worker `public/sw.js` yang
+  meng-cache app shell. Gunakan menu *Install app* / *Add to Home Screen* setelah
+  situs dimuat sekali. Service worker hanya mendaftar pada build produksi.
+
 ## Data & migrasi
 
 Data disimpan di tiga key localStorage yang saling melengkapi:

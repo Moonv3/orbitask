@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
+import { useEffectiveQuality } from "@/lib/device";
 import { useTaskStore } from "@/store/useTaskStore";
 import Scene from "./Scene";
 
@@ -14,7 +15,7 @@ export default function SolarSystem({
   autoRotate,
   resetSignal,
 }: SolarSystemProps) {
-  const quality = useTaskStore((state) => state.settings.quality);
+  const quality = useEffectiveQuality();
 
   return (
     <div className="absolute inset-0">

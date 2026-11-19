@@ -61,6 +61,8 @@ export type NewTaskInput = {
 /** Global preferences. Energy moved to each system in v3. */
 export type Settings = {
   quality: Quality;
+  /** When true, `quality` is kept as a manual fallback and the device decides. */
+  autoQuality: boolean;
   sound: boolean;
   hasSeenIntro: boolean;
 };

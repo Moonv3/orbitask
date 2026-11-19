@@ -27,6 +27,7 @@ export const DEFAULT_SYSTEM_NAME = "Tata Surya Utama";
 
 export const DEFAULT_SETTINGS: Settings = {
   quality: "high",
+  autoQuality: true,
   sound: false,
   hasSeenIntro: false,
 };
@@ -207,6 +208,9 @@ export function normalizeSettings(value: unknown): Settings {
   const input = isRecord(value) ? value : {};
   return {
     quality: input.quality === "light" ? "light" : "high",
+    // Older saves have no autoQuality key: opt them into detection while
+    // keeping their stored `quality` intact as the manual preference.
+    autoQuality: input.autoQuality !== false,
     sound: input.sound === true,
     hasSeenIntro: input.hasSeenIntro === true,
   };

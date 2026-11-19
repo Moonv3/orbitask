@@ -1,13 +1,17 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
+  useState,
   useSyncExternalStore,
   type CSSProperties,
 } from "react";
 import dynamic from "next/dynamic";
 import { Orbit, Plus } from "lucide-react";
+import { detectWebGL } from "@/lib/device";
 import { useActiveSystem, useTaskStore } from "@/store/useTaskStore";
+import SceneBoundary from "./canvas/SceneBoundary";
 import AddTaskDialog from "./ui/AddTaskDialog";
 import CommandPalette from "./ui/CommandPalette";
 import FocusHud from "./ui/FocusHud";
@@ -22,6 +26,7 @@ import SystemDialog from "./ui/SystemDialog";
 import TaskListDialog from "./ui/TaskListDialog";
 import TaskPanel from "./ui/TaskPanel";
 import TopBar from "./ui/TopBar";
+import WebGLFallback from "./ui/WebGLFallback";
 
 const SolarSystem = dynamic(() => import("./solar-system/SolarSystem"), {
   ssr: false,
@@ -70,6 +75,8 @@ export default function OrbitaskApp() {
   const dismissIntro = useTaskStore((state) => state.dismissIntro);
 
   const selected = tasks.find((task) => task.id === selectedId) ?? null;
+  const [webgl, setWebgl] = useState(detectWebGL);
+  const retryWebGL = useCallback(() => setWebgl(detectWebGL()), []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -131,10 +138,20 @@ export default function OrbitaskApp() {
         className="app-bg relative h-dvh w-full overflow-hidden"
         style={{ "--color-accent": system.accent } as CSSProperties}
       >
-      {viewMode === "galaxy" ? (
-        <Galaxy />
+      {webgl.supported ? (
+        <SceneBoundary
+          fallback={(reason, retry) => (
+            <WebGLFallback reason={reason} onRetry={retry} />
+          )}
+        >
+          {viewMode === "galaxy" ? (
+            <Galaxy />
+          ) : (
+            <SolarSystem autoRotate={autoRotate} resetSignal={resetSignal} />
+          )}
+        </SceneBoundary>
       ) : (
-        <SolarSystem autoRotate={autoRotate} resetSignal={resetSignal} />
+        <WebGLFallback reason={webgl.reason} onRetry={retryWebGL} />
       )}
 
       <div

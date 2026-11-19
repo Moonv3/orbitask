@@ -1,6 +1,7 @@
 import type { PersistedData, System } from "./types";
 import {
   DEFAULT_ENERGY_MINUTES,
+  DEFAULT_SETTINGS,
   DEFAULT_SYSTEM_NAME,
 } from "./migrate";
 import { DEFAULT_ACCENT, SYSTEM_ACCENTS } from "./palette";
@@ -53,7 +54,7 @@ export function createInitialData(): PersistedData {
   return {
     systems: [system],
     activeSystemId: system.id,
-    settings: { quality: "high", sound: false, hasSeenIntro: false },
+    settings: { ...DEFAULT_SETTINGS },
   };
 }
 
