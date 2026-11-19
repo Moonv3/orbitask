@@ -59,8 +59,9 @@ export default function IntroDialog() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="intro-title"
-        className="glass intro-panel panel-scroll max-h-[90dvh] w-full max-w-md animate-rise-in overflow-y-auto rounded-3xl p-5 sm:p-6"
+        className="glass intro-panel flex max-h-[90dvh] w-full max-w-md animate-rise-in flex-col overflow-hidden rounded-3xl"
       >
+        <div className="panel-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-6">
         <div className="flex items-center gap-3">
           <div className="intro-emblem relative grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[0.05]">
             <Orbit className="h-5 w-5 text-accent" strokeWidth={1.7} />
@@ -108,19 +109,22 @@ export default function IntroDialog() {
             );
           })}
         </ul>
+        </div>
 
-        <button
-          type="button"
-          onClick={dismissIntro}
-          className="intro-launch mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-300 to-teal-300 text-[12.5px] font-semibold text-[#04211b] shadow-[0_14px_35px_-14px_rgba(94,234,212,0.8)] transition hover:brightness-105"
-        >
-          <Sparkles className="h-4 w-4" />
-          Mulai menjelajah
-        </button>
+        <div className="shrink-0 border-t border-white/10 bg-[#070c18]/95 px-5 pb-5 pt-4 backdrop-blur-sm sm:px-6 sm:pb-6">
+          <button
+            type="button"
+            onClick={dismissIntro}
+            className="intro-launch flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-300 to-teal-300 text-[12.5px] font-semibold text-[#04211b] shadow-[0_14px_35px_-14px_rgba(94,234,212,0.8)] transition hover:brightness-105"
+          >
+            <Sparkles className="h-4 w-4" />
+            Mulai menjelajah
+          </button>
 
-        <p className="mt-3 text-center text-[10px] text-muted/70">
-          Panduan ini bisa dibuka lagi dari Pengaturan.
-        </p>
+          <p className="mt-3 text-center text-[10px] text-muted/70">
+            Panduan ini bisa dibuka lagi dari Pengaturan.
+          </p>
+        </div>
       </div>
     </div>
   );
